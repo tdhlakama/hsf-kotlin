@@ -1,5 +1,6 @@
 package hsfweb.model
 
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.ManyToOne
 
@@ -11,7 +12,6 @@ class Contact : BaseEntityId() {
 
     var type: String? = null
     var contactDetail: String? = null
-    var hpaId: String? = null
     @ManyToOne var facility: Facility? = null
 
 }

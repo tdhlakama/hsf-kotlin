@@ -12,7 +12,6 @@ class Address : BaseEntityId() {
     var addressType: String? = null
     var address1: String? = null
     var address2: String? = null
-    var hpaId: String? = null
     @ManyToOne var facility: Facility? = null
 
 }
