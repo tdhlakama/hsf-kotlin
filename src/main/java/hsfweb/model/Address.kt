@@ -15,4 +15,9 @@ class Address() : BaseEntityId() {
     @ManyToOne
     var facility: Facility? = null
 
+    override fun toString(): String {
+        return "${address1.orEmpty()} ${address2.orEmpty()}"
+    }
+
+
 }

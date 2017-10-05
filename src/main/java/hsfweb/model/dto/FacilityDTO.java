@@ -2,19 +2,37 @@ package hsfweb.model.dto;
 
 import hsfweb.controller.endpoints.BaseModel;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
 /**
  * Created by tdhla on 10/4/2017.
  */
+@Entity
 public class FacilityDTO extends BaseModel implements Comparable<FacilityDTO> {
 
     public static final Double KILOMETRE_IN_METERS = 1000.0;
 
+    public FacilityDTO(Long id, String name, String facilityType, String latitude, String longitude) {
+        this.setId(id);
+        this.setName(name);
+        this.facilityType = facilityType;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+    @Transient
     private String facilityType;
+    @Transient
     private String latitude;
+    @Transient
     private String longitude;
+    @Transient
     private Double distanceFromLocation;
+    @Transient
     private String distanceDescriptionFromLocation;
+    @Transient
     private String contactDetail;
+    @Transient
     private String addressDetail;
 
     public String getFacilityType() {

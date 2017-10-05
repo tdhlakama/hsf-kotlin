@@ -1,6 +1,7 @@
 package hsfweb.model
 
 import javax.persistence.Entity
+import javax.persistence.ManyToMany
 import javax.persistence.ManyToOne
 
 /**
@@ -9,4 +10,6 @@ import javax.persistence.ManyToOne
 @Entity
 class FacilityCategory(name: String? = null) : BaseEntity(name) {
 
+
+    @Transient val facilityTypes: Set<String>? = null
 }
