@@ -6,7 +6,7 @@ import hsfweb.model.Contact
 import java.util.ArrayList
 import javax.persistence.ManyToOne
 
-class FacilityDTO(val name: String? = null) {
+class FacilityData(val name: String? = null) {
 
     var hpaDistrict: DistrictDTO? = null;
     var latitude: String? = null

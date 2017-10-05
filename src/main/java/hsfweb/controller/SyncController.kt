@@ -2,7 +2,7 @@ package hsfweb.controller
 
 import hsfweb.model.*
 import hsfweb.model.dto.DistrictDTO
-import hsfweb.model.dto.FacilityDTO
+import hsfweb.model.dto.FacilityData
 import hsfweb.repository.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -35,7 +35,7 @@ class SyncController(val facilityRepository: FacilityRepository,
     }
 
     @PostMapping("/sync/facilities")
-    fun saveFacilities(@RequestBody facilities: List<FacilityDTO>): ResponseEntity<Facility> {
+    fun saveFacilities(@RequestBody facilities: List<FacilityData>): ResponseEntity<Facility> {
 
         facilities.forEach {
             val addresses = it.hpaFacilityAddresses.orEmpty()

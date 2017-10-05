@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface DistrictRepository : JpaRepository<District, Long> {
 
-    fun findByName(name: String): District
+    fun findByName(name: String): List<District>
 
     fun findByHpaId(hpaId: String): District
 
