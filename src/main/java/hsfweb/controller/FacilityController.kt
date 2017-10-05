@@ -3,47 +3,26 @@ package hsfweb.controller
 import hsfweb.model.District
 import hsfweb.model.Facility
 import hsfweb.model.Province
+import hsfweb.repository.DistrictRepository
 import hsfweb.repository.FacilityRepository
+import hsfweb.repository.ProvinceRepository
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController("/")
-class FacilityController(val facilityRepository: FacilityRepository) {
+class FacilityController(val facilityRepository: FacilityRepository,
+                         val provinceRepository: ProvinceRepository,
+                         val districtRepository: DistrictRepository) {
 
     @GetMapping("facilities")
     fun findAll(): List<Facility>
             = facilityRepository.findAll()
 
     @GetMapping("{name}")
-    fun findByName(@PathVariable("name") name: String): Facility
-            = facilityRepository.findByName(name)
-
-    @GetMapping("add")
-    fun save() {
-        facilityRepository.save(Facility("Takunda"))
-        facilityRepository.save(Facility("Data"))
+    fun findByName(@PathVariable("name") name: String): ResponseEntity<Facility> {
+        val facility = facilityRepository.findByName(name)
+        return ResponseEntity.ok(facility)
     }
 
-    @PostMapping("province-push")
-    fun saveProvinces(@RequestBody facilities: List<Province>): String {
-
-        return ""
-    }
-
-    @PostMapping("district-push")
-    fun saveDistricts(@RequestBody facilities: List<District>): String {
-
-        return ""
-    }
-
-
-    @PostMapping("facilities-push")
-    fun saveFacilities(@RequestBody facilities: List<Facility>): String {
-        updateFacilities(facilities)
-        return ""
-    }
-
-    fun updateFacilities(facilities: List<Facility>) {
-
-
-    }
 }

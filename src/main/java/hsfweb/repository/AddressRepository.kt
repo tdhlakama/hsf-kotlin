@@ -9,6 +9,4 @@ interface AddressRepository : JpaRepository<Address, Long> {
 
     fun findByFacility(facility: Facility): List<Address>
 
-    fun findByHpaId(hpaId: String): List<Address>
-
 }

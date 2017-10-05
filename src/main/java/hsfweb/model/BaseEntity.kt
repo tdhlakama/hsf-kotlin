@@ -1,5 +1,6 @@
 package hsfweb.model
 
+import javax.persistence.Column
 import javax.persistence.MappedSuperclass
 
 /**
@@ -8,4 +9,6 @@ import javax.persistence.MappedSuperclass
 @MappedSuperclass
 open class BaseEntity(val name: String? =null) : BaseEntityId() {
 
+    @Column(unique = true)
+    var hpaId: String? = null
 }

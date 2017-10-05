@@ -12,5 +12,4 @@ class Facility(name: String? = null) : BaseEntity(name) {
     var latitude: String? = null
     var longitude: String? = null
     var facilityType: String? = null
-
 }

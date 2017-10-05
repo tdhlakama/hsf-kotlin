@@ -11,6 +11,4 @@ open class BaseEntityId() {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null;
 
-    @Column(unique = true)
-    var hpaId: String? = null
 }
