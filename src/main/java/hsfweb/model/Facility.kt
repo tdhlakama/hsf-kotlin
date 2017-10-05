@@ -6,9 +6,12 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-class Facility(var name: String? =null) {
+class Facility(name :String? =null) : BaseEntity(name) {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id :Long? =null;
+    var hpaId: String? = null
+    var district :District?=null;
+    var latitude: String? = null
+    var longitude: String? = null
+    var facilityType: String? = null
 
 }
