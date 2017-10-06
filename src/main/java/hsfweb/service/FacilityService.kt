@@ -28,7 +28,7 @@ class FacilityService(val facilityRepository: FacilityRepository) {
         return facilityRepository.findFacilityTypes()
     }
 
-    fun findFacilities(searchTerm: String, district: District?): List<FacilityDTO> {
+    fun findFacilities(searchTerm: String?, district: District?): List<FacilityDTO> {
 
         if (!searchTerm.isNullOrEmpty() && district == null) {
            return findFacilities(searchTerm)
@@ -41,7 +41,7 @@ class FacilityService(val facilityRepository: FacilityRepository) {
         }
     }
 
-    fun findFacilities(searchTerm: String): List<FacilityDTO>
+    fun findFacilities(searchTerm: String?): List<FacilityDTO>
        = facilityRepository.findFacilitiesByName("%" + searchTerm + "%")
 
 
