@@ -1,4 +1,4 @@
-package hsfweb.model.dto;
+package hsfweb.controller;
 
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;

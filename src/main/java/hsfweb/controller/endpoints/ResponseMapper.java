@@ -1,6 +1,6 @@
 package hsfweb.controller.endpoints;
 
-import hsfweb.model.dto.FacilityDTO;
+import hsfweb.model.Facility;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
@@ -62,11 +62,11 @@ public final class ResponseMapper {
                 .body(response);
     }
 
-    public static ResponseEntity<List<Map<String, Object>>> toFacilitiesResponse(List<FacilityDTO> facilities) {
+    public static ResponseEntity<List<Map<String, Object>>> toFacilitiesResponse(List<Facility> facilities) {
         return toFacilitiesResponse(facilities, false);
     }
 
-    public static ResponseEntity<List<Map<String, Object>>> toFacilitiesResponse(List<FacilityDTO> facilities,
+    public static ResponseEntity<List<Map<String, Object>>> toFacilitiesResponse(List<Facility> facilities,
                                                                                  boolean shouldIncludeRandomListHeader) {
 
         final List<Map<String, Object>> data = new ArrayList<>();
@@ -79,7 +79,6 @@ public final class ResponseMapper {
             dataItem.put("latitude", f.getLatitude());
             dataItem.put("longitude", f.getLongitude());
             dataItem.put("distanceFromLocation", f.getDistanceFromLocation());
-            dataItem.put("distanceDescriptionFromLocation", f.getDistanceDescriptionFromLocation());
             dataItem.put("contactDetail", f.getContactDetail());
             dataItem.put("addressDetail", f.getAddressDetail());
 

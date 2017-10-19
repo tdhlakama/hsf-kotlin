@@ -1,13 +1,8 @@
 package hsfweb.controller
 
 import hsfweb.controller.endpoints.ResponseMapper
-import hsfweb.model.District
+import hsfweb.model.Facility
 import hsfweb.model.FacilityCategory
-import hsfweb.model.dto.DistanceUtil
-import hsfweb.model.dto.FacilityDTO
-import hsfweb.repository.AddressRepository
-import hsfweb.repository.ContactRepository
-import hsfweb.repository.DistrictRepository
 import hsfweb.repository.FacilityCategoryRepository
 import hsfweb.service.FacilityService
 import org.springframework.http.ResponseEntity
@@ -16,71 +11,56 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
-import kotlin.streams.toList
 
-@RestController("/")
+@RestController
 class FacilityController(val facilityService: FacilityService,
-                         val facilityCategoryRepository: FacilityCategoryRepository,
-                         val districtRepository: DistrictRepository,
-                         val contactRepository: ContactRepository,
-                         val addressRepository: AddressRepository) {
+                         val facilityCategoryRepository: FacilityCategoryRepository ) {
 
     val FACILITY_SEARCH_LIMIT = 10
 
-    @GetMapping("facilities")
-    fun findAll(): Collection<FacilityDTO>
+    @GetMapping("/api/facilities")
+    fun findAll(): Collection<Facility>
             = facilityService.findFacilities()
 
 
-    @GetMapping("{name}")
-    fun findByName(@PathVariable("name") name: String): ResponseEntity<FacilityDTO> {
-        val district: District? = null
-        val facilities = facilityService.findFacilities(name, district)
-        val facility: FacilityDTO? = facilities?.get(0)
+    @GetMapping("/api/{name}")
+    fun findByName(@PathVariable("name") name: String): ResponseEntity<Facility> {
+        val facilities = facilityService.findFacilities(name)
+        val facility: Facility? = facilities?.get(0)
         return ResponseEntity.ok(facility)
     }
 
-    @GetMapping(value = *arrayOf("facility/list", "v1/facility/list"))
+    @GetMapping(value = *arrayOf("/api/facility/list", "/api/v1/facility/list"))
     fun getFacilities(
             @RequestParam(value = "searchTerm", required = false) searchTerm: String?,
             @RequestParam(value = "facilityType", required = false) facilityType: String?,
             @RequestParam(value = "latitude", required = false) latitude: Double?,
-            @RequestParam(value = "longitude", required = false) longitude: Double?,
-            @RequestParam(value = "district", required = false) districtName: String?): ResponseEntity<List<Map<String, Any>>> {
+            @RequestParam(value = "longitude", required = false) longitude: Double?)
+            : ResponseEntity<List<Map<String, Any>>> {
 
-        var facilities: List<FacilityDTO> = emptyList()
+        var facilities: List<Facility> = emptyList()
 
-        if (!searchTerm.isNullOrEmpty() && districtName.isNullOrEmpty() && facilityType.isNullOrEmpty()) {
+        if (!searchTerm.isNullOrEmpty() && facilityType.isNullOrEmpty()) {
             facilities = facilityService.findFacilities(searchTerm)
         }
 
-        if (districtName.isNullOrEmpty() && searchTerm.isNullOrEmpty() && !facilityType.isNullOrEmpty())
-            facilities = facilityService.findFacilitiesByFacilityType(facilityType!!)
 
-        if (!searchTerm.isNullOrEmpty() && !districtName.isNullOrEmpty()) {
-            val districts: List<District>? = districtRepository.findByName(districtName!!)
-            facilities = facilityService.findFacilities(searchTerm, districts?.get(0))
+        if (searchTerm.isNullOrEmpty() && !facilityType.isNullOrEmpty()) {
+            facilities = facilityService.findFacilitiesByFacilityType(facilityType)
         }
 
         return getFacilities(facilities, latitude, longitude)
     }
 
-    fun getFacilities(facilities: List<FacilityDTO>, latitude: Double?,
+    fun getFacilities(facilities: List<Facility>, latitude: Double?,
                       longitude: Double?): ResponseEntity<List<Map<String, Any>>> {
 
-        facilities.forEach {
-
-            it.setContactDetail(contactRepository.findContacts(it.id).map { contact -> contact.contactDetail }.toString())
-
-            it.setAddressDetail(addressRepository.findAddresses(it.id).map { address -> address.toString() }.toString())
-
-        }
-        var facilitiesWithDistanceFromUser: List<FacilityDTO> = emptyList()
+        var facilitiesWithDistanceFromUser: List<Facility> = emptyList()
 
         if (latitude != null && longitude != null) {
             val currentUserLocation = DistanceUtil.Coordinate.of(latitude, longitude)
 
-            facilitiesWithDistanceFromUser = facilities.filter { it.hasCoordinate }.toList()
+            facilitiesWithDistanceFromUser = facilities.filter { it.hasCoordinate() }.toList()
 
             facilitiesWithDistanceFromUser.forEach {
 
@@ -91,7 +71,6 @@ class FacilityController(val facilityService: FacilityService,
                     val facilityCoordinate = DistanceUtil.Coordinate.of(lat, lng)
                     val facilityDistanceFomUserLocation = DistanceUtil.getDistanceToLocation(facilityCoordinate, currentUserLocation)
                     it.distanceFromLocation = facilityDistanceFomUserLocation
-                    it.assignDistanceDescription()
                 }
             }
 
@@ -115,7 +94,7 @@ class FacilityController(val facilityService: FacilityService,
 
     }
 
-    @GetMapping(value = *arrayOf("facilityType/list", "/v1/facilityType/list"))
+    @GetMapping(value = *arrayOf("/api/facilityType/list", "/api/v1/facilityType/list"))
     fun findFacilityTypes(@RequestParam(value = "category", required = false) category: String): ResponseEntity<List<String>> {
 
         var facilityTypes: List<String>? = emptyList()
