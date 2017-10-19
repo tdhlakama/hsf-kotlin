@@ -1,4 +1,4 @@
-package hsfweb.controller.endpoints;
+package finder.controller.endpoints;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package hsfweb.controller;
+package finder.controller;
 
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;

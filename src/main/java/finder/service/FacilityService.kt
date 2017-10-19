@@ -1,7 +1,7 @@
-package hsfweb.service
+package finder.service
 
-import hsfweb.model.Facility
-import hsfweb.repository.FacilityRepository
+import finder.model.Facility
+import finder.repository.FacilityRepository
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,10 +1,10 @@
-package hsfweb.controller
+package finder.controller
 
-import hsfweb.controller.endpoints.ResponseMapper
-import hsfweb.model.Facility
-import hsfweb.model.FacilityCategory
-import hsfweb.repository.FacilityCategoryRepository
-import hsfweb.service.FacilityService
+import finder.controller.endpoints.ResponseMapper
+import finder.model.Facility
+import finder.model.FacilityCategory
+import finder.repository.FacilityCategoryRepository
+import finder.service.FacilityService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,7 +14,7 @@ import java.util.*
 
 @RestController
 class FacilityController(val facilityService: FacilityService,
-                         val facilityCategoryRepository: FacilityCategoryRepository ) {
+                         val facilityCategoryRepository: FacilityCategoryRepository) {
 
     val FACILITY_SEARCH_LIMIT = 10
 

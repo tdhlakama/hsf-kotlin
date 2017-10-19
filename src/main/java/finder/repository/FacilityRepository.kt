@@ -1,6 +1,6 @@
-package hsfweb.repository
+package finder.repository
 
-import hsfweb.model.Facility
+import finder.model.Facility
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

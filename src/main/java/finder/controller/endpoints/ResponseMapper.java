@@ -1,6 +1,6 @@
-package hsfweb.controller.endpoints;
+package finder.controller.endpoints;
 
-import hsfweb.model.Facility;
+import finder.model.Facility;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;

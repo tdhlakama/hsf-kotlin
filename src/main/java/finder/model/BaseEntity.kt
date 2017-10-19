@@ -1,4 +1,4 @@
-package hsfweb.model
+package finder.model
 
 import javax.persistence.Column
 import javax.persistence.MappedSuperclass
