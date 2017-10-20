@@ -53,6 +53,11 @@ class FacilityController(val facilityService: FacilityService,
         return ResponseEntity<Facility>(facilityRepository.save(facility), HttpStatus.OK)
     }
 
+    @PatchMapping("/api/facility/patch")
+    fun patchFacility(@RequestBody facility: Facility): ResponseEntity<Facility> {
+        return ResponseEntity<Facility>(facilityRepository.save(facility), HttpStatus.OK)
+    }
+
     @DeleteMapping("/api/facility/delete/{id}")
     fun deleteFacility(@PathVariable id: Long): ResponseEntity<Boolean> {
         facilityRepository.delete(id)
