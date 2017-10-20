@@ -6,9 +6,15 @@ import finder.model.FacilityCategory
 import finder.repository.FacilityCategoryRepository
 import finder.repository.FacilityRepository
 import finder.service.FacilityService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import javax.validation.Valid
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestMapping
 
 
 @CrossOrigin
@@ -44,12 +50,18 @@ class FacilityController(val facilityService: FacilityService,
 
     @PutMapping("/api/facility/update")
     fun updateFacility(@RequestBody facility: Facility): ResponseEntity<Facility> {
-        return ResponseEntity.ok(facilityRepository.save(facility))
+        return ResponseEntity<Facility>(facilityRepository.save(facility), HttpStatus.OK)
+    }
+
+    @PutMapping("/api/facility/update/{id}")
+    fun update(@PathVariable("id") id: Long, @RequestBody @Valid facility: Facility): ResponseEntity<Facility> {
+        return ResponseEntity<Facility>(facilityRepository.save(facility), HttpStatus.OK)
     }
 
     @DeleteMapping("/api/facility/delete/{id}")
-    fun deleteFacility(@PathVariable id: Long) {
+    fun deleteFacility(@PathVariable id: Long): ResponseEntity<Boolean> {
         facilityRepository.delete(id)
+        return ResponseEntity(true, HttpStatus.OK)
     }
 
     @GetMapping(value = *arrayOf("/api/facility/list", "/api/v1/facility/list"))
