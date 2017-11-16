@@ -29,18 +29,18 @@ class FacilityController(val finderService: FacilityService,
             = productRepository.findProducts()
 
     @GetMapping("/api/facility/get/{id}")
-    fun findFacilityByName(@PathVariable("id") id: Long): ResponseEntity<Facility> {
+    fun findFacilityById(@PathVariable("id") id: Long): ResponseEntity<Facility> {
         val facility = facilityRepository.getOne(id)
         return ResponseEntity.ok(facility)
     }
 
     @GetMapping("/api/product/get/{id}")
-    fun findProductByName(@PathVariable("id") id: Long): ResponseEntity<Product> {
+    fun findProductById(@PathVariable("id") id: Long): ResponseEntity<Product> {
         val product = productRepository.getOne(id)
         return ResponseEntity.ok(product)
     }
 
-    @GetMapping("/api/product/facility/{id}")
+    @GetMapping("/api/products/facility/{id}")
     fun findByFacility(@PathVariable("id") id: Long): ResponseEntity<List<Product>> {
         val facility = facilityRepository.getOne(id)
         return ResponseEntity.ok(productRepository.findByFacility(facility))
