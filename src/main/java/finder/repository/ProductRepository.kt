@@ -16,7 +16,7 @@ interface ProductRepository : JpaRepository<Product, Long> {
     @Query("select p.name from Product p where p.name like :name")
     fun findProductsByName(@Param("name") name: String): List<Product>
 
-    @Query("select p.name from Product p where p.name like :name and p.facility:=facility")
+    @Query("select p.name from Product p where p.name like :name and p.facility=:facility")
     fun findProductsByNameAndFacility(@Param("name") name: String, @Param("facility") facility: Facility): List<Product>
 
 }
