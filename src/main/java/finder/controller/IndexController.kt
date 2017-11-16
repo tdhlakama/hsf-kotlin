@@ -14,4 +14,9 @@ class IndexController {
         return "index"
     }
 
+    @RequestMapping("/index")
+    fun index(): String {
+        return "index"
+    }
+
 }
