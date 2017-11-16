@@ -2,9 +2,9 @@ package finder.controller
 
 import finder.controller.endpoints.ResponseMapper
 import finder.model.Facility
-import finder.model.FacilityCategory
-import finder.repository.FacilityCategoryRepository
+import finder.model.Product
 import finder.repository.FacilityRepository
+import finder.repository.ProductRepository
 import finder.service.FacilityService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,28 +14,36 @@ import java.util.*
 
 @CrossOrigin
 @RestController
-class FacilityController(val facilityService: FacilityService,
-                         val facilityCategoryRepository: FacilityCategoryRepository,
-                         val facilityRepository: FacilityRepository) {
+class FacilityController(val finderService: FacilityService,
+                         val facilityRepository: FacilityRepository,
+                         val productRepository: ProductRepository) {
 
     val FACILITY_SEARCH_LIMIT = 10
 
     @GetMapping("/api/facilities")
-    fun findAll(): Collection<Facility>
+    fun findFacilities(): Collection<Facility>
             = facilityRepository.findFacilities()
 
+    @GetMapping("/api/products")
+    fun findProducts(): Collection<Product>
+            = productRepository.findProducts()
 
-    @GetMapping("/api/facilities/search/{name}")
-    fun findByName(@PathVariable("name") name: String): ResponseEntity<Facility> {
-        val facilities = facilityService.findFacilities(name)
-        val facility: Facility? = facilities?.get(0)
+    @GetMapping("/api/facility/get/{id}")
+    fun findFacilityByName(@PathVariable("id") id: Long): ResponseEntity<Facility> {
+        val facility = facilityRepository.getOne(id)
         return ResponseEntity.ok(facility)
     }
 
-    @GetMapping("/api/facility/get/{id}")
-    fun findByName(@PathVariable("id") id: Long): ResponseEntity<Facility> {
+    @GetMapping("/api/product/get/{id}")
+    fun findProductByName(@PathVariable("id") id: Long): ResponseEntity<Product> {
+        val product = productRepository.getOne(id)
+        return ResponseEntity.ok(product)
+    }
+
+    @GetMapping("/api/product/facility/{id}")
+    fun findByFacility(@PathVariable("id") id: Long): ResponseEntity<List<Product>> {
         val facility = facilityRepository.getOne(id)
-        return ResponseEntity.ok(facility)
+        return ResponseEntity.ok(productRepository.findByFacility(facility))
     }
 
     @PostMapping("/api/facility/add")
@@ -43,14 +51,29 @@ class FacilityController(val facilityService: FacilityService,
         return ResponseEntity.ok(facilityRepository.save(facility))
     }
 
+    @PostMapping("/api/product/add")
+    fun saveProduct(@RequestBody product: Product): ResponseEntity<Product> {
+        return ResponseEntity.ok(productRepository.save(product))
+    }
+
     @PutMapping("/api/facility/update")
     fun updateFacility(@RequestBody facility: Facility): ResponseEntity<Facility> {
         return ResponseEntity<Facility>(facilityRepository.save(facility), HttpStatus.OK)
     }
 
+    @PutMapping("/api/product/update")
+    fun updateFacility(@RequestBody product: Product): ResponseEntity<Product> {
+        return ResponseEntity<Product>(productRepository.save(product), HttpStatus.OK)
+    }
+
     @PatchMapping("/api/facility/patch")
     fun patchFacility(@RequestBody facility: Facility): ResponseEntity<Facility> {
         return ResponseEntity<Facility>(facilityRepository.save(facility), HttpStatus.OK)
+    }
+
+    @PatchMapping("/api/product/patch")
+    fun patchFacility(@RequestBody product: Product): ResponseEntity<Product> {
+        return ResponseEntity<Product>(productRepository.save(product), HttpStatus.OK)
     }
 
     @DeleteMapping("/api/facility/delete/{id}")
@@ -59,22 +82,23 @@ class FacilityController(val facilityService: FacilityService,
         return ResponseEntity(true, HttpStatus.OK)
     }
 
-    @GetMapping(value = *arrayOf("/api/facility/list", "/api/v1/facility/list"))
+    @DeleteMapping("/api/product/delete/{id}")
+    fun deleteProduct(@PathVariable id: Long): ResponseEntity<Boolean> {
+        productRepository.delete(id)
+        return ResponseEntity(true, HttpStatus.OK)
+    }
+
+    @GetMapping(value = *arrayOf("/api/facility/list"))
     fun getFacilities(
             @RequestParam(value = "searchTerm", required = false) searchTerm: String?,
-            @RequestParam(value = "facilityType", required = false) facilityType: String?,
             @RequestParam(value = "latitude", required = false) latitude: Double?,
             @RequestParam(value = "longitude", required = false) longitude: Double?)
             : ResponseEntity<List<Map<String, Any>>> {
 
         var facilities: List<Facility> = emptyList()
 
-        if (!searchTerm.isNullOrEmpty() && facilityType.isNullOrEmpty()) {
-            facilities = facilityService.findFacilities(searchTerm)
-        }
-
-        if (searchTerm.isNullOrEmpty() && !facilityType.isNullOrEmpty()) {
-            facilities = facilityService.findFacilitiesByFacilityType(facilityType)
+        if (!searchTerm.isNullOrEmpty()) {
+            facilities = finderService.findFacilities(searchTerm)
         }
 
         return getFacilities(facilities, latitude, longitude)
@@ -122,17 +146,4 @@ class FacilityController(val facilityService: FacilityService,
 
     }
 
-    @GetMapping(value = *arrayOf("/api/facilityType/list", "/api/v1/facilityType/list"))
-    fun findFacilityTypes(@RequestParam(value = "category", required = false) category: String): ResponseEntity<List<String>> {
-
-        var facilityTypes: List<String>? = emptyList()
-        if (!category.isNullOrEmpty()) {
-            val facilityCategory: FacilityCategory = facilityCategoryRepository.findByName(category)
-            facilityTypes = facilityCategory.facilityTypes?.toList()
-        } else {
-            facilityTypes = facilityRepository.findFacilityTypes()
-        }
-
-        return ResponseMapper.toStringResponse(facilityTypes)
-    }
 }

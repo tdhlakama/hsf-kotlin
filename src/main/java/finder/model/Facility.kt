@@ -7,7 +7,6 @@ class Facility(name: String? = null) : BaseEntity(name), Comparable<Facility> {
 
     var latitude: String? = null
     var longitude: String? = null
-    var facilityType: String? = null
     var contactDetail: String? = null
     var addressDetail: String? = null
     @Transient
